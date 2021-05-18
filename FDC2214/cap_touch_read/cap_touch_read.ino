@@ -15,26 +15,31 @@ FDC2214 capsense1(FDC2214_I2C_ADDR_1);
 int READ_BYTES = 2;
 unsigned long byteArray0[4] = {0, 0, 0, 0};
 unsigned long byteArray1[4] = {0, 0, 0, 0};
+long avgReading;
 
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-  Serial.println("Hello World");
-  boolean fdc0 = capsense0.begin(0xF, 0x6, 0x5);
+  boolean fdc0 = capsense0.begin(0xF, 0x6, 0x5, false);
 //  boolean fdc1 = capsense1.begin(0xF, 0x6, 0x5);
-  boolean fdc1 = capsense1.begin(0x1, 0x1, 0x5);
+  boolean fdc1 = capsense1.begin(0x1, 0x1, 0x5, false);
   //boolean capOk = capsense.begin(0x3, 0x4, 0x5);
-  Serial.println("Finished Setup");
+  /*
   if (fdc0) Serial.println("Sensor 0 OK");
   else Serial.println("Sensor 0 Fail");
   if (fdc1) Serial.println("Sensor 1 OK");
   else Serial.println("Sensor 1 Fail");
+  */
   delay(500);
+  for (int i = 0; i < 16; i++) {
+    avgReading += capsense1.getReading28(0);
+  }
+  avgReading /= 16;
 }
 
 void loop() {
-  unsigned long capa = capsense1.getReading28(0);
-  Serial.println(capa);
+  long capa = capsense1.getReading28(0);
+  Serial.println(capa-avgReading);
 //  for (int i = 0; i < 4; i++) {
 //    byteArray0[i] = capsense0.getReading28(i); 
 //    Serial.print(byteArray0[i]);  

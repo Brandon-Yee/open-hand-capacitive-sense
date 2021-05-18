@@ -1,46 +1,30 @@
-# Serial Data Reader from 2 Sources
+#!/usr/bin/env python
+# Capacitive Sensor Publisher
 import rospy
-from sensor_msgs.msg
-
 import serial
+from std_msgs.msg import Int32
 
-ser = serial.Serial('/dev/cu.usbmodem14101')
-ser2 = serial.Serial('/dev/cu.usbmodem14201')
-f = open("cap_sense_5_11_20_a.txt", 'w')
+SERIAL_PORT = '/dev/ttyACM0'
+BAUDRATE = 9600
 
-for i in range(4):
-    ser_bytes = ser.readline()
-    print(ser_bytes)
-    f.write(str(ser_bytes))
+# Capacitive sense publisher
+def publish_message():
+    ser = serial.Serial(SERIAL_PORT)
+    pub = rospy.Publisher('capacitance', Int32, queue_size=1)
+    rospy.init_node('cap_sense', anonymous=True)
+    rate = rospy.Rate(100) 
+    while not rospy.is_shutdown():
+        if ser.in_waiting:
+            bytes = ser.readline()[:-2].decode("latin-1") # remove newline + return chars
+            if len(bytes) > 0:
+                pub.publish(int(bytes))
+                ser.reset_input_buffer()
+                
+        rate.sleep()
 
-print('Serial1 Connected')
-
-for i in range(6):
-    ser2_bytes = ser2.readline()
-    print(ser2_bytes)
-    f.write(str(ser2_bytes))
-
-print('Serial2 Connected')
-
-NUM_SAMPLES = 1000
-count = 0
-while count < NUM_SAMPLES:
-    if ser2.in_waiting > 0:
-        ser2_bytes = ser2.readline()
-        ser2_bytes = ser2_bytes[0:len(ser2_bytes)-2].decode("latin-1")
-        print(str(ser2_bytes), ', ')
-        f.write(str(ser2_bytes))
-        f.write(', ')
-        while ser2.in_waiting == 0:
-            if ser.in_waiting > 0:
-                ser_bytes = ser.readline()
-                ser_bytes = ser_bytes[0:len(ser_bytes)-2].decode("latin-1")
-                print(str(ser_bytes), ', ')
-                f.write(str(ser_bytes))
-                f.write(', ')
-
-        f.write('\n')
-        ser.reset_input_buffer()
-        count = count + 1
-
-f.close()
+# Main        
+if __name__ == '__main__':
+    try:
+        publish_message()
+    except rospy.ROSInterruptException:
+        pass

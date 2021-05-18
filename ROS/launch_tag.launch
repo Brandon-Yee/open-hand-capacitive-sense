@@ -2,8 +2,10 @@
     <include file="$(find usb_cam)/launch/usb_cam-test.launch"> </include>
 
     <node name="image_proc" pkg="image_proc" type="image_proc" ns="usb_cam"/>
-
+    
     <include file="$(find apriltag_ros)/launch/continuous_detection.launch">
         <arg name="camera_name" default="usb_cam" />
     </include>
+    
+    <node name="cap_sense" pkg="cap_sense" type="cap_sense.py"/>
 </launch>
