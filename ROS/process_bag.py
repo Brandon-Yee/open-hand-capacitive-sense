@@ -10,6 +10,6 @@ b = bagreader('test.bag')
 
 # replace the topic name as per your need
 TF_MSG = b.message_by_topic(topic='/tf')
-CAP_MSG = b.message_by_topic(topic='/cap')
+CAP_MSG = b.message_by_topic(topic='/capacitance')
 tf = pd.read_csv(TF_MSG)
 cap = pd.read_csv(CAP_MSG)
