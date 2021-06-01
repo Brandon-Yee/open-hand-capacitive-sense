@@ -4,7 +4,7 @@ import rospy
 import serial
 from std_msgs.msg import Int32
 
-SERIAL_PORT = '/dev/ttyACM0'
+SERIAL_PORT = '/dev/ttyACM1'
 BAUDRATE = 9600
 
 # Capacitive sense publisher

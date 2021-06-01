@@ -7,8 +7,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 
-cap = pd.read_csv('./test/capacitance.csv')
-tf = pd.read_csv('./test/tf.csv')
+bag_folder = './test1'
+cap = pd.read_csv(bag_folder + '/capacitance.csv')
+tf = pd.read_csv(bag_folder + '/tf.csv')
 
 
 tf_times = tf['Time']
@@ -30,7 +31,7 @@ quaternions = quaternions.T
 print(quaternions.shape)
 
 rotations = Rotation.from_quat(quaternions).as_euler('xyz', degrees=True)
-fig, ax1 = plt.subplots()
+fig, ax1 = plt.subplots(figsize=(10,6))
 ax1.plot(cap['Time'], cap['data'], c='r')
 
 ax2 = ax1.twinx()
