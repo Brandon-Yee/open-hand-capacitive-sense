@@ -6,7 +6,9 @@ import bagpy
 from bagpy import bagreader
 import pandas as pd
 
-b = bagreader('test1.bag')
+BAG_FILE = 'test1.bag'
+
+b = bagreader(BAG_FILE)
 
 # replace the topic name as per your need
 TF_MSG = b.message_by_topic(topic='/tf')

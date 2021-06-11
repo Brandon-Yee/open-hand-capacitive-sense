@@ -20,16 +20,10 @@ long avgReading;
 void setup() {
   Wire.begin();
   Serial.begin(9600);
+  // capsense args [channel mask, autoscan sequence, deglitch value]
   boolean fdc0 = capsense0.begin(0xF, 0x6, 0x5, false);
-//  boolean fdc1 = capsense1.begin(0xF, 0x6, 0x5);
   boolean fdc1 = capsense1.begin(0x1, 0x1, 0x5, false);
-  //boolean capOk = capsense.begin(0x3, 0x4, 0x5);
-  /*
-  if (fdc0) Serial.println("Sensor 0 OK");
-  else Serial.println("Sensor 0 Fail");
-  if (fdc1) Serial.println("Sensor 1 OK");
-  else Serial.println("Sensor 1 Fail");
-  */
+ 
   delay(500);
   for (int i = 0; i < 16; i++) {
     avgReading += capsense1.getReading28(0);
@@ -40,17 +34,4 @@ void setup() {
 void loop() {
   long capa = capsense1.getReading28(0);
   Serial.println(capa-avgReading);
-//  for (int i = 0; i < 4; i++) {
-//    byteArray0[i] = capsense0.getReading28(i); 
-//    Serial.print(byteArray0[i]);  
-//    if (i < 3) Serial.print(", ");
-//    else Serial.println(""); 
-//    byteArray1[i] = capsense1.getReading28(i);
-//    if (i == 0) 
-//    {
-//      Serial.println(byteArray1[i] - 14800000);
-//    }
-//    if (i < 3) Serial.print(", ");
-//    else Serial.println(""); 
-//  }
 }
